@@ -1,6 +1,8 @@
 
 /* checkstring.c */
+int setupgkword(gk_word *, char *string, PrntFlags prntflags);
 int checkstring(char *, PrntFlags, FILE *);
+int check_gkword(gk_word *, char *);
 int checkstring1(gk_word *);
 int checkstring2(gk_word *);
 int checkstring3(gk_word *);
