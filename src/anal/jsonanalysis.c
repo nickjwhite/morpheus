@@ -1,6 +1,5 @@
 /* TODO:
  * - Don't hardcode language
- * - Get rid of trailing commas at the end of each entry
  * - Use EMSCRIPTEN_KEEPALIVE or EXPORTED_FUNCTIONS for analysis_as_json()
  */
 
@@ -92,13 +91,13 @@ int analysis_as_json(char *in, char *json)
 		} else {
 			strncat(s, "indeclinable", BUFSIZ - strlen(s) - 1);
 		}
-		strncat(s, "\",\n", BUFSIZ - strlen(s) - 1);
+		strncat(s, "\"", BUFSIZ - strlen(s) - 1);
 		strncat(json, s, BUFSIZ - strlen(json) - 1);
 
 		for(j = 0; j < LENGTH(forms); j++) {
 			s2 = forms[j].fn(wf);
 			if(*s2) {
-				snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", forms[j].name, s2);
+				snprintf(s, BUFSIZ - 1, ",\n\t\t\t\"%s\": \"%s\"", forms[j].name, s2);
 				strncat(json, s, BUFSIZ - strlen(json) - 1);
 			}
 			
@@ -108,28 +107,28 @@ int analysis_as_json(char *in, char *json)
 			s3[0] = 0;
 			names[j].fn(a, s3, " ");
 			if(*s3) {
-				snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", names[j].name, s3);
+				snprintf(s, BUFSIZ - 1, ",\n\t\t\t\"%s\": \"%s\"", names[j].name, s3);
 				strncat(json, s, BUFSIZ - strlen(json) - 1);
 			}
 		}
 
 		if(*(s2 = NameOfStemtype(stemtype_of(a)))) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "stemtype", s2);
+			snprintf(s, BUFSIZ - 1, ",\n\t\t\t\"%s\": \"%s\"", "stemtype", s2);
 			strncat(json, s, BUFSIZ - strlen(json) - 1);
 		}
 		if(*(s2 = NameOfDerivtype(derivtype_of(a)))) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "derivtype", s2);
+			snprintf(s, BUFSIZ - 1, ",\n\t\t\t\"%s\": \"%s\"", "derivtype", s2);
 			strncat(json, s, BUFSIZ - strlen(json) - 1);
 		}
 
 		s3[0] = 0;
 		MorphNames(morphflags_of(a),s3," ", 0);
 		if(*s3) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "morphology-names", s3);
+			snprintf(s, BUFSIZ - 1, ",\n\t\t\t\"%s\": \"%s\"", "morphology-names", s3);
 			strncat(json, s, BUFSIZ - strlen(json) - 1);
 		}
 
-		strncat(json, "\t\t}", BUFSIZ - strlen(json) - 1);
+		strncat(json, "\n\t\t}", BUFSIZ - strlen(json) - 1);
 	}
 
 	strncat(json, "\n\t]\n}\n", BUFSIZ - strlen(json) - 1);
