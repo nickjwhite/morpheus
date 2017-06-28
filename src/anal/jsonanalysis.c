@@ -61,7 +61,6 @@ int analysis_as_json(char *in, char *json)
 		a = analysis_of(w)+i;
 		wf = forminfo_of(a);
 
-
 		if(i > 0) {
 			strncat(json, ",\n", BUFSIZ - strlen(json) - 1);
 		}
@@ -138,7 +137,7 @@ int analysis_as_json(char *in, char *json)
 	return 0;
 }
 
-main()
+int main()
 {
 	char line[BUFSIZ];
 	char *s;
@@ -152,5 +151,6 @@ main()
 		printf("%s", s);
 		free(s);
 	}
-}
 
+	return 0;
+}
