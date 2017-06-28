@@ -1,7 +1,7 @@
 /* TODO:
  * - Don't hardcode language
- * - Get the struct based method working, and expand it to the
- *   other generalisable things
+ * - Get rid of trailing commas at the end of each entry
+ * - Expand the struct based method to the other generalisable things
  * - Use EMSCRIPTEN_KEEPALIVE or EXPORTED_FUNCTIONS for analysis_as_json()
  */
 
@@ -13,7 +13,7 @@ int quickflag = 0;
 #define LENGTH(X) (sizeof X / sizeof X[0])
 
 typedef struct {
-	char (*fn)(word_form);
+	char * (*fn)(word_form);
 	char *name;	
 } Forms;
 
@@ -85,48 +85,13 @@ int analysis_as_json(char *in, char *json)
 		strncat(s, "\",\n", BUFSIZ - strlen(s) - 1);
 		strncat(json, s, BUFSIZ - strlen(json) - 1);
 
-
-		/* For some reason this segfaults, so just do this the messy way for now */
-	/*	for(j = 0; j < LENGTH(forms); j++) {
+		for(j = 0; j < LENGTH(forms); j++) {
 			s2 = forms[j].fn(wf);
 			if(*s2) {
-				snprintf(s, BUFSIZ - 1, "\"%s\": \"%s\",", forms[j].name, s2);
+				snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", forms[j].name, s2);
+				strncat(json, s, BUFSIZ - strlen(json) - 1);
 			}
 			
-		}
-	*/
-
-		if(*(s2 = NameOfTense(wf))) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "tense", s2);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
-		}
-		if(*(s2 = NameOfMood(wf))) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "mood", s2);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
-		}
-		if(*(s2 = NameOfVoice(wf))) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "voice", s2);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
-		}
-		if(*(s2 = NameOfGender(wf))) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "gender", s2);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
-		}
-		if(*(s2 = NameOfCase(wf))) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "case", s2);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
-		}
-		if(*(s2 = NameOfDegree(wf))) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "degree", s2);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
-		}
-		if(*(s2 = NameOfPerson(wf))) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "person", s2);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
-		}
-		if(*(s2 = NameOfNumber(wf))) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "number", s2);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
 		}
 
 		s3[0] = 0;
