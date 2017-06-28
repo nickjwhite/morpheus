@@ -1,7 +1,6 @@
 /* TODO:
  * - Don't hardcode language
  * - Get rid of trailing commas at the end of each entry
- * - Expand the struct based method to the other generalisable things
  * - Use EMSCRIPTEN_KEEPALIVE or EXPORTED_FUNCTIONS for analysis_as_json()
  */
 
@@ -26,6 +25,17 @@ Forms forms[] = {
 	{ NameOfDegree, "degree" },
 	{ NameOfPerson, "person" },
 	{ NameOfNumber, "number" },
+};
+
+typedef struct {
+	int * (*fn)(gk_analysis *, char *, char *);
+	char *name;
+} Names;
+
+Names names[] = {
+	{ DialectNamesFromAnal, "dialect" },
+	{ DomainNamesFromAnal, "domain" },
+	{ GeogRegionNamesFromAnal, "geographic-region" },
 };
 
 int analysis_as_json(char *in, char *json)
@@ -80,7 +90,7 @@ int analysis_as_json(char *in, char *json)
 		} else if(Is_verbform(a)) {
 			strncat(s, "verb", BUFSIZ - strlen(s) - 1);
 		} else {
-			strncat(s, "I", BUFSIZ - strlen(s) - 1);
+			strncat(s, "indeclinable", BUFSIZ - strlen(s) - 1);
 		}
 		strncat(s, "\",\n", BUFSIZ - strlen(s) - 1);
 		strncat(json, s, BUFSIZ - strlen(json) - 1);
@@ -94,32 +104,13 @@ int analysis_as_json(char *in, char *json)
 			
 		}
 
-		s3[0] = 0;
-		DialectNames(dialect_of(a),s3," ");
-		if(*s3) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "dialects", s3);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
-		}
-
-		s3[0] = 0;
-		GeogRegionNames(geogregion_of(a),s3," ");
-		if(*s3) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "geographic-region", s3);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
-		}
-
-		s3[0] = 0;
-		DomainNames(domains_of(a),s3," ");
-		if(*s3) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "domains", s3);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
-		}
-
-		s3[0] = 0;
-		MorphNames(morphflags_of(a),s3," ", 0);
-		if(*s3) {
-			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "morphology-names", s3);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
+		for(j = 0; j < LENGTH(names); j++) {
+			s3[0] = 0;
+			names[j].fn(a, s3, " ");
+			if(*s3) {
+				snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", names[j].name, s3);
+				strncat(json, s, BUFSIZ - strlen(json) - 1);
+			}
 		}
 
 		if(*(s2 = NameOfStemtype(stemtype_of(a)))) {
@@ -128,6 +119,13 @@ int analysis_as_json(char *in, char *json)
 		}
 		if(*(s2 = NameOfDerivtype(derivtype_of(a)))) {
 			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "derivtype", s2);
+			strncat(json, s, BUFSIZ - strlen(json) - 1);
+		}
+
+		s3[0] = 0;
+		MorphNames(morphflags_of(a),s3," ", 0);
+		if(*s3) {
+			snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "morphology-names", s3);
 			strncat(json, s, BUFSIZ - strlen(json) - 1);
 		}
 

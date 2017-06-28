@@ -243,3 +243,6 @@ char * NameOfDegree(word_form af);
 char * NameOfDialect(Dialect di);
 char * NameOfStemtype(Stemtype st);
 char * NameOfDerivtype(Derivtype st);
+int DomainNamesFromAnal(gk_analysis *, char *, char *);
+int DialectNamesFromAnal(gk_analysis *, char *, char *);
+int GeogRegionNamesFromAnal(gk_analysis *, char *, char *);

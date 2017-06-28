@@ -14,8 +14,11 @@ char *NameOfVoice(word_form);
 char *NameOfDialect(Dialect);
 */
 int DomainNames(char *, char *, char *);
+int DomainNamesFromAnal(gk_analysis *, char *, char *);
 int DialectNames(Dialect, char *, char *);
+int DialectNamesFromAnal(gk_analysis *, char *, char *);
 int GeogRegionNames(GeogRegion, char *, char *);
+int GeogRegionNamesFromAnal(gk_analysis *, char *, char *);
 char *NameOfGender(word_form);
 char *NameOfCase(word_form);
 char *NameOfDegree(word_form);

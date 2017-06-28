@@ -360,6 +360,11 @@ DomainNames(char *domp, char *res, char *dels)
 	}
 }
   
+DomainNamesFromAnal(gk_analysis *a, char *res, char *dels)
+{
+	return DomainNames(domains_of(a), res, dels);
+}
+
  DialectNames(Dialect di, char *res, char *dels)
 {
 	char * s;
@@ -389,6 +394,11 @@ DomainNames(char *domp, char *res, char *dels)
 	return;
 }
 
+ DialectNamesFromAnal(gk_analysis *a, char *res, char *dels)
+{
+	return DialectNames(dialect_of(a), res, dels);
+}
+
  GeogRegionNames(GeogRegion gr, char *res, char *dels)
 {
 	char * s;
@@ -414,6 +424,11 @@ DomainNames(char *domp, char *res, char *dels)
 		morph_args++;
 	}
 	return;
+}
+
+ GeogRegionNamesFromAnal(gk_analysis *a, char *res, char *dels)
+{
+	return GeogRegionNames(geogregion_of(a), res, dels);
 }
 
 char *
