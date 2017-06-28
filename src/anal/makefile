@@ -66,6 +66,9 @@ findbase:	findbase.o ${ANALOBJ} ${LIBS}
 deverbal: deverb.o   ${ANALOBJ} ${LIBS}
 	${CC} -o deverbal deverb.o ${ANALOBJ} ${LIBS}
 
+morphjson.js: ${LIBS} ${ANALLIB} jsonanalysis.o
+	${CC} -s EXPORTED_FUNCTIONS="['analysis_as_json']" -o $@ jsonanalysis.o ../gener/genwd.o ${ANALLIB} ${LIBS}
+
 clean:
 	rm -f cruncher *.o
 
