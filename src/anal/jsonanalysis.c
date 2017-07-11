@@ -6,6 +6,11 @@
 #include <stdio.h>
 #include <prntflags.h> // for LATIN
 #include <gkstring.h>
+#include "../morphlib/gkstring.proto.h"
+#include "../morphlib/morphkeys.proto.h"
+#include "../morphlib/morphflags.proto.h"
+#include "../morphlib/setlang.proto.h"
+#include "checkstring.proto.h"
 int quickflag = 0;
 
 #define LENGTH(X) (sizeof X / sizeof X[0])
@@ -27,7 +32,7 @@ Forms forms[] = {
 };
 
 typedef struct {
-	int * (*fn)(gk_analysis *, char *, char *);
+	int (*fn)(gk_analysis *, char *, char *);
 	char *name;
 } Names;
 
