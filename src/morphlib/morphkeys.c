@@ -7,8 +7,12 @@
 #include "morphkeys.h"
 #include <stdlib.h>
 #include <string.h>
-#include "../greeklib/xstrings.proto.h"
 #include "gkstring.proto.h"
+#include "morphflags.proto.h"
+#include "morphkeys.proto.h"
+#include "nextkey.proto.h"
+#include "../greeklib/binlook.proto.h"
+#include "../greeklib/xstrings.proto.h"
 #ifdef LIGHTSPEED
 
 /*
@@ -378,7 +382,7 @@ DomainNamesFromAnal(gk_analysis *a, char *res, char *dels)
 	
 	*res = 0;
 	if( ! di )
-		return;
+		return(0);
 	mf = (Morph_flags)di;
 
 	while( morph_args->morph_key[0] ) {
@@ -391,7 +395,7 @@ DomainNamesFromAnal(gk_analysis *a, char *res, char *dels)
 		}
 		morph_args++;
 	}
-	return;
+	return(0);
 }
 
  DialectNamesFromAnal(gk_analysis *a, char *res, char *dels)
@@ -412,7 +416,7 @@ DomainNamesFromAnal(gk_analysis *a, char *res, char *dels)
 	
 	*res = 0;
 	if( ! gr )
-		return;
+		return(0);
 	mf = (Morph_flags)gr;
 
 	while( morph_args->morph_key[0] ) {
@@ -423,7 +427,7 @@ DomainNamesFromAnal(gk_analysis *a, char *res, char *dels)
 		}
 		morph_args++;
 	}
-	return;
+	return(0);
 }
 
  GeogRegionNamesFromAnal(gk_analysis *a, char *res, char *dels)
