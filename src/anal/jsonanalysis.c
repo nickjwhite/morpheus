@@ -13,6 +13,7 @@
 int quickflag = 0;
 
 #define LENGTH(X) (sizeof X / sizeof X[0])
+#define MAXJSON 131072
 
 typedef struct {
 	char * (*fn)(word_form);
@@ -44,9 +45,9 @@ Names names[] = {
 char * analysis_as_json(char *in)
 {
 	gk_word *w = NULL;
-	char s[BUFSIZ];
+	char s[MAXJSON];
 	char *s2;
-	char s3[BUFSIZ];
+	char s3[MAXJSON];
 	int i;
 	int j;
 	gk_analysis *a;
@@ -56,7 +57,7 @@ char * analysis_as_json(char *in)
 	s[0] = 0;
 	s2 = 0;
 
-	json = malloc(sizeof(char) * BUFSIZ);
+	json = malloc(sizeof(char) * MAXJSON);
 
 	/* We expect this to be run from an emscripten environment, where the MORPHLIB
 	 * variable won't be set, so set it to the right location for emscripten if so. */
@@ -69,49 +70,49 @@ char * analysis_as_json(char *in)
 	w = (gk_word *) CreatGkword(1);
 	check_gkword(w, in);
 
-	snprintf(json, BUFSIZ-1, "{\n\t\"%s\": [\n", in);
+	snprintf(json, MAXJSON-1, "{\n\t\"%s\": [\n", in);
 
 	for(i = 0; i < totanal_of(w); i++) {
 		a = analysis_of(w)+i;
 		wf = forminfo_of(a);
 
 		if(i > 0) {
-			strncat(json, ",\n", BUFSIZ - strlen(json) - 1);
+			strncat(json, ",\n", MAXJSON - strlen(json) - 1);
 		}
-		strncat(json, "\t\t{\n", BUFSIZ - strlen(json) - 1);
+		strncat(json, "\t\t{\n", MAXJSON - strlen(json) - 1);
 
 		/* Broadly copied from DumpPerseusAnalysis() */
-		snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "lemma", lemma_of(a));
-		strncat(json, s, BUFSIZ - strlen(json) - 1);
+		snprintf(s, MAXJSON - 1, "\t\t\t\"%s\": \"%s\",\n", "lemma", lemma_of(a));
+		strncat(json, s, MAXJSON - strlen(json) - 1);
 
-		snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "work", workword_of(a));
-		strncat(json, s, BUFSIZ - strlen(json) - 1);
+		snprintf(s, MAXJSON - 1, "\t\t\t\"%s\": \"%s\",\n", "work", workword_of(a));
+		strncat(json, s, MAXJSON - strlen(json) - 1);
 
-		snprintf(s, BUFSIZ - 1, "\t\t\t\"%s\": \"%s\",\n", "raw", rawword_of(a));
-		strncat(json, s, BUFSIZ - strlen(json) - 1);
+		snprintf(s, MAXJSON - 1, "\t\t\t\"%s\": \"%s\",\n", "raw", rawword_of(a));
+		strncat(json, s, MAXJSON - strlen(json) - 1);
 
-		snprintf(s, BUFSIZ - 1, "\t\t\t\"type\": \"");
+		snprintf(s, MAXJSON - 1, "\t\t\t\"type\": \"");
 		if(Is_participle(a)) {
-			strncat(s, "participle", BUFSIZ - strlen(s) - 1);
+			strncat(s, "participle", MAXJSON - strlen(s) - 1);
 		} else if( Is_nounform(a) || Is_adjform(a) ) {
 			if(isupper(lemma_of(a)[0]) && cur_lang() == GREEK) {
-				strncat(s, "english", BUFSIZ - strlen(s) - 1);
+				strncat(s, "english", MAXJSON - strlen(s) - 1);
 			} else {
-				strncat(s, "noun", BUFSIZ - strlen(s) - 1);
+				strncat(s, "noun", MAXJSON - strlen(s) - 1);
 			}
 		} else if(Is_verbform(a)) {
-			strncat(s, "verb", BUFSIZ - strlen(s) - 1);
+			strncat(s, "verb", MAXJSON - strlen(s) - 1);
 		} else {
-			strncat(s, "indeclinable", BUFSIZ - strlen(s) - 1);
+			strncat(s, "indeclinable", MAXJSON - strlen(s) - 1);
 		}
-		strncat(s, "\"", BUFSIZ - strlen(s) - 1);
-		strncat(json, s, BUFSIZ - strlen(json) - 1);
+		strncat(s, "\"", MAXJSON - strlen(s) - 1);
+		strncat(json, s, MAXJSON - strlen(json) - 1);
 
 		for(j = 0; j < LENGTH(forms); j++) {
 			s2 = forms[j].fn(wf);
 			if(*s2) {
-				snprintf(s, BUFSIZ - 1, ",\n\t\t\t\"%s\": \"%s\"", forms[j].name, s2);
-				strncat(json, s, BUFSIZ - strlen(json) - 1);
+				snprintf(s, MAXJSON - 1, ",\n\t\t\t\"%s\": \"%s\"", forms[j].name, s2);
+				strncat(json, s, MAXJSON - strlen(json) - 1);
 			}
 			
 		}
@@ -120,31 +121,31 @@ char * analysis_as_json(char *in)
 			s3[0] = 0;
 			names[j].fn(a, s3, " ");
 			if(*s3) {
-				snprintf(s, BUFSIZ - 1, ",\n\t\t\t\"%s\": \"%s\"", names[j].name, s3);
-				strncat(json, s, BUFSIZ - strlen(json) - 1);
+				snprintf(s, MAXJSON - 1, ",\n\t\t\t\"%s\": \"%s\"", names[j].name, s3);
+				strncat(json, s, MAXJSON - strlen(json) - 1);
 			}
 		}
 
 		if(*(s2 = NameOfStemtype(stemtype_of(a)))) {
-			snprintf(s, BUFSIZ - 1, ",\n\t\t\t\"%s\": \"%s\"", "stemtype", s2);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
+			snprintf(s, MAXJSON - 1, ",\n\t\t\t\"%s\": \"%s\"", "stemtype", s2);
+			strncat(json, s, MAXJSON - strlen(json) - 1);
 		}
 		if(*(s2 = NameOfDerivtype(derivtype_of(a)))) {
-			snprintf(s, BUFSIZ - 1, ",\n\t\t\t\"%s\": \"%s\"", "derivtype", s2);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
+			snprintf(s, MAXJSON - 1, ",\n\t\t\t\"%s\": \"%s\"", "derivtype", s2);
+			strncat(json, s, MAXJSON - strlen(json) - 1);
 		}
 
 		s3[0] = 0;
 		MorphNames(morphflags_of(a),s3," ", 0);
 		if(*s3) {
-			snprintf(s, BUFSIZ - 1, ",\n\t\t\t\"%s\": \"%s\"", "morphology-names", s3);
-			strncat(json, s, BUFSIZ - strlen(json) - 1);
+			snprintf(s, MAXJSON - 1, ",\n\t\t\t\"%s\": \"%s\"", "morphology-names", s3);
+			strncat(json, s, MAXJSON - strlen(json) - 1);
 		}
 
-		strncat(json, "\n\t\t}", BUFSIZ - strlen(json) - 1);
+		strncat(json, "\n\t\t}", MAXJSON - strlen(json) - 1);
 	}
 
-	strncat(json, "\n\t]\n}\n", BUFSIZ - strlen(json) - 1);
+	strncat(json, "\n\t]\n}\n", MAXJSON - strlen(json) - 1);
 
 	FreeGkword(w);
 
