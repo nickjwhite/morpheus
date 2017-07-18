@@ -1,10 +1,9 @@
 /* TODO:
  * - Don't hardcode language
- * - Use EMSCRIPTEN_KEEPALIVE or EXPORTED_FUNCTIONS for analysis_as_json()
  */
 
 #include <stdio.h>
-#include <prntflags.h> // for LATIN
+#include <prntflags.h>
 #include <gkstring.h>
 #include "../morphlib/gkstring.proto.h"
 #include "../morphlib/morphkeys.proto.h"
@@ -42,7 +41,7 @@ Names names[] = {
 	{ GeogRegionNamesFromAnal, "geographic-region" },
 };
 
-int analysis_as_json(char *in, char *json)
+char * analysis_as_json(char *in)
 {
 	gk_word *w = NULL;
 	char s[BUFSIZ];
@@ -52,10 +51,20 @@ int analysis_as_json(char *in, char *json)
 	int j;
 	gk_analysis *a;
 	word_form wf;
+	char *json;
 
 	s[0] = 0;
 	s2 = 0;
-	json[0] = 0;
+
+	json = malloc(sizeof(char) * BUFSIZ);
+
+	/* We expect this to be run from an emscripten environment, where the MORPHLIB
+	 * variable won't be set, so set it to the right location for emscripten if so. */
+	if(getenv("MORPHLIB") == NULL) {
+		putenv("MORPHLIB=stemlib-outonly");
+	}
+
+	set_lang(LATIN);
 
 	w = (gk_word *) CreatGkword(1);
 	check_gkword(w, in);
@@ -139,7 +148,7 @@ int analysis_as_json(char *in, char *json)
 
 	FreeGkword(w);
 
-	return 0;
+	return json;
 }
 
 int main()
@@ -147,12 +156,10 @@ int main()
 	char line[BUFSIZ];
 	char *s;
 
-	set_lang(LATIN);
 	while(fgets(line, BUFSIZ, stdin)) {
 		line[strlen(line)-1] = 0; // cut newline
 
-		s = malloc(sizeof(char) * BUFSIZ);
-		analysis_as_json(line, s);
+		s = analysis_as_json(line);
 		printf("%s", s);
 		free(s);
 	}

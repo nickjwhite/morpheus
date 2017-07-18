@@ -67,7 +67,9 @@ deverbal: deverb.o   ${ANALOBJ} ${LIBS}
 	${CC} -o deverbal deverb.o ${ANALOBJ} ${LIBS}
 
 morphjson.js: ${LIBS} ${ANALLIB} jsonanalysis.o
-	${CC} -s EXPORTED_FUNCTIONS="['_analysis_as_json']" -o $@ jsonanalysis.o ../gener/genwd.o ${ANALLIB} ${LIBS}
+	#${CC} -O2 -s EXPORTED_FUNCTIONS="['_analysis_as_json']" -o $@ jsonanalysis.o ../gener/genwd.o ${ANALLIB} ${LIBS}
+	${CC} -s EXPORTED_FUNCTIONS="['_analysis_as_json']" --preload-file ../../stemlib-outonly -o $@ jsonanalysis.o ../gener/genwd.o ${ANALLIB} ${LIBS}
+	printf 'var analysis_as_json = Module.cwrap("analysis_as_json", "string", ["string"]);' >> $@
 
 clean:
 	rm -f cruncher *.o
