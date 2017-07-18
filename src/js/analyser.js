@@ -1,3 +1,20 @@
+function printjson(j) {
+	var i;
+	var t = "";
+
+        for(i in j) {
+                t += "<dt>" + i + "</dt><dd>";
+                if(j[i] instanceof Object) {
+                        t += "<dl>" + printjson(j[i]) + "</dl>";
+                } else {
+                        t += j[i];
+                }
+                t += "</dd>";
+        }
+
+        return t;
+}
+
 function analyseme(e) {
 	var a;
 	var d;
@@ -6,12 +23,12 @@ function analyseme(e) {
 
 	s = e.currentTarget.textContent.trim().toLowerCase();
 
-	j = analysis_as_json(s);
+	j = JSON.parse(analysis_as_json(s));
 	
 	d = document.createElement("div");
 	d.id = "morphanalysis";
 	d.style = "display: block; position: absolute; border: thin solid black;";
-	d.innerHTML = "<pre>" + j + "</pre>";
+	d.innerHTML = printjson(j);
 
 	if((a = document.getElementById("morphanalysis")) != null) {
 		document.body.replaceChild(d, a);
