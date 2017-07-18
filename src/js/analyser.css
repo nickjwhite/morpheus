@@ -1,0 +1,12 @@
+#morphanalysis {
+	display: block;
+	position: absolute;
+	border: thin solid #333333;
+	background-color: #f8f8f8;
+}
+
+#morphanalysis #x {
+	padding: 0 1ex;
+	cursor: pointer;
+	background-color: #dd8888;
+}

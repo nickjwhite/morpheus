@@ -20,15 +20,31 @@ function analyseme(e) {
 	var d;
 	var j;
 	var s;
+	var x;
 
-	s = e.currentTarget.textContent.trim().toLowerCase();
+	s = e.currentTarget.textContent.trim().toLowerCase().replace(/[\";\.,]/, "");
 
 	j = JSON.parse(analysis_as_json(s));
-	
+
 	d = document.createElement("div");
 	d.id = "morphanalysis";
-	d.style = "display: block; position: absolute; border: thin solid black;";
-	d.innerHTML = printjson(j);
+	d.style = "left: " + e.clientX + "px; top: " + e.clientY + "px;";
+
+	x = document.createElement("span");
+	x.style = "float: right; font-family: sans-serif;";
+	x.textContent = "x";
+	x.id = "x";
+	x.addEventListener("click", function(e) {
+		var t;
+		if((t = document.getElementById("morphanalysis")) != null) {
+			document.body.removeChild(t);
+		}
+	}, false);
+	d.appendChild(x);
+
+	x = document.createElement("span");
+	x.innerHTML = printjson(j);
+	d.appendChild(x);
 
 	if((a = document.getElementById("morphanalysis")) != null) {
 		document.body.replaceChild(d, a);
