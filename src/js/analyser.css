@@ -1,12 +1,37 @@
+body {
+	max-width: 60em;
+	background-color: white;
+	margin: auto;
+}
+
+h1 {
+	font-family: sans-serif;
+}
+
 #morphanalysis {
 	display: block;
 	position: absolute;
 	border: thin solid #333333;
 	background-color: #f8f8f8;
+	max-width: 20em;
+	box-shadow: 0.5em 0.5em 0.5em #606060;
 }
 
 #morphanalysis #x {
 	padding: 0 1ex;
 	cursor: pointer;
 	background-color: #dd8888;
+	float: right;
+	font-family: sans-serif;
+	border-left: thin solid #882222;
+	border-bottom: thin solid #882222;
+}
+
+#morphanalysis h3, #morphanalysis p {
+	padding: 0em 1em;
+}
+
+#morphanalysis p {
+	border-top: thin solid #d8d8d8;
+	padding-top: 0.5em;
 }

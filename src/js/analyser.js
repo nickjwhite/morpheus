@@ -1,15 +1,19 @@
 function printjson(j) {
+	var a;
 	var i;
+	var n;
 	var t = "";
 
         for(i in j) {
-                t += "<dt>" + i + "</dt><dd>";
-                if(j[i] instanceof Object) {
-                        t += "<dl>" + printjson(j[i]) + "</dl>";
-                } else {
-                        t += j[i];
-                }
-                t += "</dd>";
+		t += "<h3>" + i + "</h3>";
+
+		for(n of j[i]) {
+			t += "<p>";
+			for(a in n) {
+				t += a + ": " + n[a] + "<br />";
+			}
+			t += "</p>";
+		}
         }
 
         return t;
@@ -22,7 +26,7 @@ function analyseme(e) {
 	var s;
 	var x;
 
-	s = e.currentTarget.textContent.trim().toLowerCase().replace(/[\";\.,]/, "");
+	s = e.currentTarget.textContent.trim().replace(/[\";\.,]/, "");
 
 	j = JSON.parse(analysis_as_json(s));
 
@@ -31,7 +35,6 @@ function analyseme(e) {
 	d.style = "left: " + e.clientX + "px; top: " + e.clientY + "px;";
 
 	x = document.createElement("span");
-	x.style = "float: right; font-family: sans-serif;";
 	x.textContent = "x";
 	x.id = "x";
 	x.addEventListener("click", function(e) {
@@ -60,10 +63,14 @@ function loadanalyser() {
 	var s;
 	for(i of document.getElementsByTagName("p")) {
 		n = document.createElement("p");
-		for(a of i.textContent.split(" ")) {
-			s = document.createElement("span");
-			s.addEventListener("click", analyseme);
-			s.textContent = a + " ";
+		for(l of i.textContent.split("\n")) {
+			for(a of l.split(" ")) {
+				s = document.createElement("span");
+				s.addEventListener("click", analyseme);
+				s.textContent = a + " ";
+				n.appendChild(s);
+			}
+			s = document.createElement("br");
 			n.appendChild(s);
 		}
 		document.body.replaceChild(n, i);
