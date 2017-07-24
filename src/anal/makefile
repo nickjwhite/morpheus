@@ -66,9 +66,9 @@ findbase:	findbase.o ${ANALOBJ} ${LIBS}
 deverbal: deverb.o   ${ANALOBJ} ${LIBS}
 	${CC} -o deverbal deverb.o ${ANALOBJ} ${LIBS}
 
-morphjson.js: ${LIBS} ${ANALLIB} jsonanalysis.o
+morpheus.js: ${LIBS} ${ANALLIB} jsonanalysis.o
 	${CC} -O2 -s EXPORTED_FUNCTIONS="['_analysis_as_json']" --preload-file ../../stemlib-outonly -o $@ jsonanalysis.o ../gener/genwd.o ${ANALLIB} ${LIBS}
-	printf 'var analysis_as_json = Module.cwrap("analysis_as_json", "string", ["string"]);' >> $@
+	printf 'var MorpheusAnalysis = Module.cwrap("analysis_as_json", "string", ["string"]);' >> $@
 
 clean:
 	rm -f cruncher *.o

@@ -28,7 +28,7 @@ function analyseme(e) {
 
 	s = e.currentTarget.textContent.trim().replace(/[\";\.,]/, "");
 
-	j = JSON.parse(analysis_as_json(s));
+	j = JSON.parse(MorpheusAnalysis(s));
 
 	d = document.createElement("div");
 	d.id = "morphanalysis";
