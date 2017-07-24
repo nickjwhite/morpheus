@@ -152,15 +152,13 @@ char * analysis_as_json(char *in)
 	return json;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-	char line[BUFSIZ];
+	int i;
 	char *s;
 
-	while(fgets(line, BUFSIZ, stdin)) {
-		line[strlen(line)-1] = 0; // cut newline
-
-		s = analysis_as_json(line);
+	for(i=1; i < argc; i++) {
+		s = analysis_as_json(argv[i]);
 		printf("%s", s);
 		free(s);
 	}
