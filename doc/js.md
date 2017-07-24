@@ -5,6 +5,16 @@ can be used directly anywhere that javascript can run.
 
 ## Building morpheus.js
 
+The first step is to build a minimal version of the stemlib, which
+ensures fast loading of morpheus.js. Do that with this command (once
+morpheus has been built):
+
+```
+cd stemlib/Latin
+export PATH=$PATH:../../bin
+MORPHLIB=.. make outonly
+```
+
 morpheus.js uses emscripten to compile, so the first step is to
 download and install that from https://github.com/kripken/emscripten
 and put the tools on your path, following the emscripten
@@ -14,11 +24,12 @@ documentation. On Linux this will be something like the following:
 cd emscripten && . emsdk_env.sh
 ```
 
-You can then (re)build morpheus with emscripten, using the normal
-make tools, with this command:
+You can then rebuild morpheus with emscripten, using the normal make
+tools, with this command:
 
 ```
 cd morpheus/src
+make clean
 emmake make CC=emcc all
 ```
 
