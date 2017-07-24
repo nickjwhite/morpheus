@@ -1,6 +1,6 @@
 LSDIR=/local/text/ls
 
-all: ends noms vbs deriv outonly
+all: ends noms vbs deriv
 
 ends: nends vends
 

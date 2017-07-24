@@ -1,8 +1,7 @@
-/* TODO:
- * - Don't hardcode language
- */
+#define usage "jsonanalysis [-l lat|grc|ita] words\n"
 
 #include <stdio.h>
+#include <string.h>
 #include <prntflags.h>
 #include <gkstring.h>
 #include "../morphlib/gkstring.proto.h"
@@ -42,7 +41,7 @@ Names names[] = {
 	{ GeogRegionNamesFromAnal, "geographic-region" },
 };
 
-char * analysis_as_json(char *in)
+char * analysis_as_json(char *lang, char *in)
 {
 	gk_word *w = NULL;
 	char s[MAXJSON];
@@ -65,7 +64,13 @@ char * analysis_as_json(char *in)
 		putenv("MORPHLIB=stemlib-outonly");
 	}
 
-	set_lang(LATIN);
+	if(strcmp(lang, "grc") == 0) {
+		set_lang(GREEK);
+	} else if(strcmp(lang, "ita") == 0) {
+		set_lang(ITALIAN);
+	} else {
+		set_lang(LATIN);
+	}
 
 	w = (gk_word *) CreatGkword(1);
 	check_gkword(w, in);
@@ -156,12 +161,29 @@ int main(int argc, char *argv[])
 {
 	int i;
 	char *s;
+	char *l;
 
-	for(i=1; i < argc; i++) {
-		s = analysis_as_json(argv[i]);
-		printf("%s", s);
+	i = 1;
+
+	if(argc > 1 && strcmp(argv[1], "-h") == 0) {
+		fputs(usage, stdout);
+		return 0;
+	}
+
+	if(argc > 1 && strcmp(argv[1], "-l") == 0) {
+		l = strdup(argv[2]);
+		i += 2;
+	} else {
+		l = strdup("lat");
+	}
+
+	for(; i < argc; i++) {
+		s = analysis_as_json(l, argv[i]);
+		fputs(s, stdout);
 		free(s);
 	}
+
+	free(l);
 
 	return 0;
 }

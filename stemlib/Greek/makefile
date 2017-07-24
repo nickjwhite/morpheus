@@ -82,3 +82,6 @@ lsj.morph:	${LSJDIR}/lemmata
 	fgrep -v "0:" /tmp/lsj.morph > stemsrc/lsj.nom
 	cp /tmp/lsj.morph .
 
+outonly: ends noms vbs deriv
+	mkdir -p ../../stemlib-outonly/Greek
+	cp -r conjfile derivs endtables oddfile rule_files steminds ../../stemlib-outonly/Greek

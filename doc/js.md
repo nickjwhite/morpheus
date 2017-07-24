@@ -6,8 +6,8 @@ can be used directly anywhere that javascript can run.
 ## Building morpheus.js
 
 The first step is to build a minimal version of the stemlib, which
-ensures fast loading of morpheus.js. Do that with this command (once
-morpheus has been built):
+ensures fast loading of morpheus.js. Do that with this command, for
+each language you need available (once morpheus has been built):
 
 ```
 cd stemlib/Latin
@@ -49,8 +49,9 @@ Once built, morpheus.js can be loaded into the browser in the normal
 way for javascript.
 
 Once loaded, the function MorpheusAnalysis() is available, which is
-passed a lemma as a string, and returns a morphological analysis in
-JSON format.
+passed a language code and a lemma as strings, and returns a
+morphological analysis in JSON format. Note that MorpheusAnalysis()
+only uses betacode for Greek input at present.
 
 You can see the morpheus.js in action in js/demo.html for a very
 basic example of how to use it in a web context.

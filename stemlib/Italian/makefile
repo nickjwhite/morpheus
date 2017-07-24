@@ -103,3 +103,7 @@ simp.vbs:
 /tmp/nt: latnom splitlems
 	splitlems < /local/text/ls/lemmata | latnom > /tmp/lat
 	getitype < /tmp/lat | sort | uniq -c | sort -rn > /tmp/nt
+
+outonly: ends noms vbs deriv
+	mkdir -p ../../stemlib-outonly/Italian
+	cp -r conjfile derivs endtables oddfile rule_files steminds ../../stemlib-outonly/Italian
