@@ -30,14 +30,14 @@ tools, with this command:
 ```
 cd morpheus/src
 make clean
-emmake make CC=emcc all
+make CC=emcc all
 ```
 
 And to package it all together into the final javascript:
 
 ```
 cd anal
-emmake make CC=emcc morpheus.js
+make CC=emcc morpheus.js
 ```
 
 This will produce three files, *morpheus.js*, *morpheus.js.mem* and
@@ -63,7 +63,7 @@ on the command line. This requires building it without a separate
 
 ```
 cd anal
-emmake make CC=emcc morpheus-embed.js
+make CC=emcc morpheus-embed.js
 ```
 
 If you have nodejs installed, you can now run morpheus with a
