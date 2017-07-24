@@ -1,1 +1,3 @@
-See doc/js.md
+Copy your morpheus.js, morpheus.js.mem and morpheus.data files into this directory and load up demo.js.
+
+See doc/js.md for details.
