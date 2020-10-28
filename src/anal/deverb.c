@@ -89,7 +89,7 @@ main()
 	}
 }
 
-gk_string Gstr, BlankGstr;
+extern gk_string Gstr, BlankGstr;
 testcmpstem(char *needlemma,char *stem,char * stemkeys,char* matchkeys,char * transkeys)
 {
 	char rawprvb[BUFSIZ], fullprevb[BUFSIZ], half2[BUFSIZ];
